@@ -29,7 +29,20 @@ class PostController extends Controller
             "image" => "nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048"
         ]);
 
+        $post = Post::create($request->all());
 
+        if ($request->file('image')) {
+            $imageExtension = $request->file('image')->getExtension();
+            $path = $request->file('image')->storeAs('images', $post->id . '.' . $imageExtension, 'public');
+            $post->update([
+                "image" => $path
+            ]);
+        }
+
+        return response()->json([
+            "post" => $post,
+            "message" => "Post created successfully!"
+        ], 200);
     }
 
     /**
