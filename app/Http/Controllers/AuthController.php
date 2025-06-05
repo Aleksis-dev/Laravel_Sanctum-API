@@ -38,6 +38,22 @@ class AuthController extends Controller
             "email" => "required|email|exists|max:255",
             "password" => "required|min:8|max:255"
         ]);
+
+        $user = User::where("email", $request->input("email"))->first();
+
+        if ($user && Hash::check($request->input("password"), $user->password)) {
+            $token = $user->createToken("token")->plainTextToken;
+
+            return response()->json([
+                "user" => $user,
+                "token" => $token,
+                "message" => "Successfully logged in as " . $user->name
+            ], 200);
+        } else {
+            return response()->json([
+                "message" => "Invalid credentials!"
+            ], 401);
+        }
     }
 
     public function logout(Request $request)
