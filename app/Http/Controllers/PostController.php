@@ -65,6 +65,21 @@ class PostController extends Controller
             "content" => "required|max:1000",
             "image" => "nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048"
         ]);
+
+        $post->update($request->all());
+
+        if ($request->file('image')) {
+            $imageExtension = $request->file('image')->getExtension();
+            $path = $request->file('image')->storeAs('images', $post->id . '.' . $imageExtension, 'public');
+            $post->update([
+                "image" => $path
+            ]);
+        }
+
+        return response()->json([
+            "post" => $post,
+            "message" => "Successfully updated post " . $post->title
+        ], 200);
     }
 
     /**
