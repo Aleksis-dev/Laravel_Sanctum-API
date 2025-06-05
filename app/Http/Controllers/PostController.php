@@ -23,7 +23,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "title" => "required|max:255",
+            "content" => "required|max:1000",
+            "image" => "nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048"
+        ]);
+
+
     }
 
     /**
@@ -39,7 +45,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            "title" => "required|max:255",
+            "content" => "required|max:1000",
+            "image" => "nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048"
+        ]);
     }
 
     /**
