@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Gate;
 class PostController extends Controller implements HasMiddleware
 {
     public static function middleware() {
-        return new Middleware('auth:sanctum', except: ['index' , 'show']);
+        return [
+            new Middleware('auth:sanctum', except: ['index' , 'show'])
+        ];
     }
     /**
      * Display a listing of the resource.
@@ -100,7 +102,7 @@ class PostController extends Controller implements HasMiddleware
         $temp = $post;
 
         $post->delete();
-        
+
         return response()->json([
             "message" => "Post " . $temp->title . " was successfully deleted!"
         ], 200);
